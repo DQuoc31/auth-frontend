@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from 'react-router-dom'
+import type { AxiosError } from 'axios'
+import type { ApiError } from '../services/api'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
@@ -106,7 +108,11 @@ const Login = () => {
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-md p-4">
                 <p className="text-sm text-red-800">
-                  {error.message}
+                  {(() => {
+                    // prefer the backend message when available (AxiosError.response.data.message)
+                    const axiosErr = error as unknown as AxiosError<ApiError>
+                    return axiosErr?.response?.data?.message ?? axiosErr?.message ?? 'Đã có lỗi xảy ra. Vui lòng thử lại.'
+                  })()}
                 </p>
               </div>
             )}

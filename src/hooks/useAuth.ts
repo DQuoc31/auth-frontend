@@ -1,9 +1,10 @@
 import { useMutation } from '@tanstack/react-query'
-import type { RegisterRequest, LoginRequest, AuthResponse } from '../services/api'
+import type { AxiosError } from 'axios'
+import type { RegisterRequest, LoginRequest, AuthResponse, ApiError } from '../services/api'
 import { authAPI } from '../services/api'
 
 export const useRegister = () => {
-  return useMutation<AuthResponse, Error, RegisterRequest>({
+  return useMutation<AuthResponse, AxiosError<ApiError>, RegisterRequest>({
     mutationFn: (data: RegisterRequest) => authAPI.register(data),
     onSuccess: (data) => {
       console.log('Đăng ký thành công:', data)
@@ -15,7 +16,7 @@ export const useRegister = () => {
 }
 
 export const useLogin = () => {
-  return useMutation<AuthResponse, Error, LoginRequest>({
+  return useMutation<AuthResponse, AxiosError<ApiError>, LoginRequest>({
     mutationFn: (data: LoginRequest) => authAPI.login(data),
     onSuccess: (data) => {
       console.log('Đăng nhập thành công:', data)
